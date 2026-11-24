@@ -43,8 +43,12 @@ def validate_entry(text):
         raise ValueError("entry must not contain control characters")
     if "\t" in text:
         raise ValueError("entry must not contain tabs")
-    if text.count(".") + text.count("!") + text.count("?") < 1:
-        raise ValueError("entry must be a sentence")
+    terminators = sum(text.count(c) for c in ".!?")
+    if terminators != 1:
+        raise ValueError(
+            f"entry must be exactly one sentence, found {terminators} "
+            "sentence-ending marks (. ! ?)"
+        )
     text.encode("utf-8")  # must be valid UTF-8
 
 
